@@ -24,6 +24,11 @@ RUN apt-get update \
     libncursesw5-dev \
     libffi-dev \
     liblzma-dev \
+    mecab \
+    libmecab-dev \
+    mecab-ipadic-utf8 \
+    fonts-ipafont-gothic \
+    unzip \
     vim \
     ssh \
     wget \
@@ -39,9 +44,14 @@ RUN $PYENV_ROOT/plugins/python-build/install.sh
 RUN /usr/local/bin/python-build -v $PYTHON_VERSION $PYTHON_ROOT
 RUN rm -rf $PYENV_ROOT
 
-RUN pip install --upgrade pip
+RUN pip install --upgrade pip setuptools
 
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
+
+RUN pip install torch==1.10.0+cpu \
+    torchvision==0.11.1+cpu \
+    torchaudio==0.10.0+cpu \
+    -f https://download.pytorch.org/whl/cpu/torch_stable.html
 
 WORKDIR home/work
